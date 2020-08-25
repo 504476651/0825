@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>1111111</div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // Vue的视图更新是异步的.
+        // 如何获取更新之后的视图状态? -> 可以通过updated获取.
+        // updated会获取虽有数据变化后的视图状态.
+        // 如何只获取某个数据变化导致的视图更新后的状态? -> nextTick.
+
+        const App = {
+            template:`
+                <div id='app'>
+                    <input type='button' value='按钮' @click='fn' />
+                    <input type='button' value='按钮' @click='fun' />
+                    <p ref='myp'>{{msg}}</p>
+                    <p>{{str}}</p>
+                </div>
+            `,
+            data(){
+                return {
+                    msg:'8888',
+                    str:'9999'
+                }
+            },
+            // 在created内添加nextTick -> 实现了mounted的效果.
+            created(){               
+                this.$nextTick(()=>{
+                    document.getElementById('app').style.backgroundColor = 'red';
+                })
+            },
+            methods:{
+                fn(){
+                    // 数据变化导致视图变化,是异步的.
+                    this.msg = Math.random();
+                    // 获取视图p的内容.
+                    // let str = this.$refs.myp.innerText;
+                    // console.log('p的内容',str);
+
+                    // 开始更新视图
+
+                    // nextTick的回调函数会自动在当前的视图更新完毕之后触发.(单次触发的updated)
+                    this.$nextTick(()=>{
+                        let str = this.$refs.myp.innerText;
+                        console.log('p的内容',str);
+                    });
+                },
+                fun(){
+                    this.str = Math.random();
+                }
+            },
+            updated(){
+                // let str = this.$refs.myp.innerText;
+                // console.log('p的内容',str);
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>

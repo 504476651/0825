@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script src="./js/vue1.js"></script>
+<script>
+    let App = {
+        template:`
+            <div ref = 'div'>
+                <button @click = 'back'>按钮</button>
+                <span v-cloak >{{ msg }}</span>
+
+            </div>
+        `,
+        data(){
+            return{
+                msg:222
+            }
+        },
+        methods:{
+            back(){
+              this.$refs.div.style.background = '500px'
+            }
+        }
+    }
+   let vm  = new Vue({
+        render:h=>h(App)
+    }).$mount('#app')
+</script>
+</html>

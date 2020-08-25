@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>1111111</div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 模板内的表达式是在beforeMount和Mounted之间调用.
+        // 模板生成虚拟节点就是beforeMount和Mounted之间进行的.
+        // 编译模板时,需要把表达式求值,然后把返回值放入虚拟节点中.以便后续渲染新视图.
+
+        const App = {
+            template:`
+                <div id='app'>
+                    999999999
+                    <p v-for='d in 3'>{{d}}</p>
+                    {{fn()}}
+                </div>
+            `,
+            methods:{
+                fn(){
+                    document.getElementById('app').style.backgroundColor = 'red';
+                    console.log('fn调用了');
+                }
+            },
+            created(){
+                console.log('created')
+                // created的时候,新视图还没有挂载.因此无法操作.
+                // 实际这里修改的是老视图的背景.
+                // document.getElementById('app').style.backgroundColor = 'red';
+            },
+            beforeMount(){
+                console.log('beforeMount');
+            },
+            mounted(){
+                console.log('mounted');
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>

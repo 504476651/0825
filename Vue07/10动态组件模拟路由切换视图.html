@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 动态组件 -> 通过给is属性绑定变量.再切换变量的值,就可以切换显示对应的组件.
+
+        const Page1 = {
+            template:`<div>首页</div>`
+        }
+        const Page2 = {
+            template:`<div>新闻</div>`
+        }
+        const Page3 = {
+            template:`<div>体育</div>`
+        }
+
+        const App = {
+            template:`
+                <div>
+                    <a href="#div1" @click='fn'>首页</a>
+                    <a href="#div2" @click='fn'>新闻</a>
+                    <a href="#div3" @click='fn'>体育</a>
+                    <div :is='com' />
+                </div>
+            `,
+            data(){
+                return {com:'Page1'}
+            },
+            components:{Page1,Page2,Page3},
+            methods:{
+                fn(){
+                    // 获取当前的哈希值.
+                    let hash = location.hash;
+                    // 根据哈希值匹配显示的组件.
+                    console.log(hash);
+                    switch(hash){
+                        case '#div1':                           
+                            this.com = 'Page1';
+                            break;
+                        case '#div2':
+                            this.com = 'Page2';
+                            break;
+                        case '#div3':
+                            this.com = 'Page3';
+                            break;
+                    }
+                }
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+    
+</body>
+</html>

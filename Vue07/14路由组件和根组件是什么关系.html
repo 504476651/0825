@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+        // 路由的路由组件可以通过router-view获取到父组件的数据.
+
+        const Home = {
+            template:`<div>首页{{msg}}</div>`,
+            props:['msg'],
+            created(){
+                console.log(this.$parent);// App
+            }
+        }
+
+        const News = {
+            template:`<div>新闻{{msg}}</div>`,
+            props:['msg']
+        }
+
+        const Sport = {
+            template:`<div>体育{{msg}}</div>`,
+            props:['msg']
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/home',
+                    component:Home
+                },{
+                    path:'/news',
+                    component:News
+                },{
+                    path:'/sport',
+                    component:Sport
+                },{
+                    path:'/',
+                    redirect:'/home'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <button @click='toPage("/home")'>首页</button>
+                    <button @click='toPage("/news")'>新闻</button>
+                    <button @click='toPage("/sport")'>体育</button>
+                    <router-view :msg='msg' />
+                </div>
+            `,
+            data(){
+                return {msg:'来自App的数据'}
+            },
+            methods:{
+                toPage(path){
+                    this.$router.push(path);// "/div1"
+                }
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

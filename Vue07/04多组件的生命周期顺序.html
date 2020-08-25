@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>
+        <ul>
+            <li>
+                <span>99999</span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 同一个组件的创建阶段的4个钩子函数顺序 -> beforeCreate,created,beforeMounte,mounted.
+        // 多个组件,例如父子组件的钩子顺序是怎么样的.兄弟组件的钩子顺手是怎么样的.
+
+        // 父子钩子顺序:
+        // 父beforeCreate,
+        // 父created,
+        // 父beforeMounte,
+        // 子beforeCreate,
+        // 子created,
+        // 子beforeMounte,
+        // 子mounted,
+        // 父mounted.
+
+        // 兄弟组件的钩子顺序.
+        // 父beforeCreate,
+        // 父created,
+        // 父beforeMounte,
+
+        // 子1beforeCreate,
+        // 子1created,
+        // 子1beforeMounte,
+
+        // 子2beforeCreate,
+        // 子2created,
+        // 子2beforeMounte,
+        
+        // 子1mounted,
+        // 子2mounted,
+        // 父mounted.
+
+        const List = {
+            template:`
+                <ul>
+                    <li>22222222222</li>
+                </ul>
+            `,
+            beforeCreate(){
+                console.log('List','beforeCreate')
+            },
+            created(){
+                console.log('List','created')
+            },
+            beforeMount(){
+                console.log('List','beforeMount')
+            },
+            mounted(){
+                console.log('List','mounted')
+            }
+        }
+
+        const Item = {
+            template:`
+                <ul>
+                    <li>22222222222</li>
+                </ul>
+            `,
+            beforeCreate(){
+                console.log('Item','beforeCreate')
+            },
+            created(){
+                console.log('Item','created')
+            },
+            beforeMount(){
+                console.log('Item','beforeMount')
+            },
+            mounted(){
+                console.log('Item','mounted')
+            }
+        }
+
+        const App = {
+            template:`
+                <div>
+                    {{content}}
+                    <List />
+                    <Item />
+                </div>
+            `,
+            data(){
+                return {content:'来自App的数据'}
+            },
+            components:{List,Item},
+            beforeCreate(){
+                console.log('App','beforeCreate')
+            },
+            created(){
+                console.log('App','created')
+            },
+            beforeMount(){
+                console.log('App','beforeMount')
+            },
+            mounted(){
+                console.log('App','mounted')
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>:

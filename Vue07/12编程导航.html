@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+        // router-link -> 在被点击的时候,url的路径部分会自动变成router-link的to属性.
+        // 如果不用router-link如何实现路由的跳转?
+        // 通过编程导航实现. -> 通过Router实例的push,replace,go,forWard,back进行跳转路由.history对象
+        
+        // push会产生历史记录.replace不会产生历史记录.
+        // replace不会把当前的路由组件放入历史记录内.(例如登录页面)
+
+        const Page1 = {
+            template:`<div>首页</div>`
+        }
+        const Page2 = {
+            template:`<div>新闻</div>`
+        }
+        const Page3 = {
+            template:`<div>体育</div>`
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/div1',
+                    component:Page1
+                },{
+                    path:'/div2',
+                    component:Page2
+                },{
+                    path:'/div3',
+                    component:Page3
+                },{
+                    path:'/',
+                    redirect:'/div1'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <button @click='toPage("/div1")'>首页</button>
+                    <button @click='toPage("/div2")'>新闻</button>
+                    <button @click='toPage("/div3")'>体育</button>
+                    <button @click='goForward'>前进</button>
+                    <button @click='goBack'>后退</button>
+                    <router-view />
+                </div>
+            `, 
+            methods:{
+                goBack(){
+                    this.$router.back();
+                },
+                goForward(){
+                    this.$router.forward();
+                },
+                toPage(path){
+                    this.$router.push(path);
+                    // this.$router.replace(path);
+
+                    // 前进
+                    // this.$router.forward();
+                    // 后退
+                    // this.$router.back();
+                    // 指定跳转
+                    // this.$router.go(2);
+                }
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>
+        <ul>
+            <li>
+                <span>99999</span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 如果App的数据需要传递给第4级子组件,则这数据需要经过每一层子组件,才能传递到最底层的组件.
+        // 这个做法很麻烦.
+        // 这种组件的组织方法,把布局'割裂了'.导致布局结构变得不直观了.
+
+        const Content = {
+            template:`<span>{{content}}</span>`,
+            props:['content']
+        }
+
+        const Item = {
+            template:`
+                <li>
+                    <Content :content='content' />
+                </li>
+            `,
+            props:['content'],
+            components:{Content}
+        }
+
+        const List = {
+            template:`
+                <ul>
+                    <Item :content='content' />
+                </ul>
+            `,
+            props:['content'],
+            components:{Item}
+        }
+
+        const App = {
+            template:`
+                <div>
+                    {{content}}
+                    <List :content='content' />
+                </div>
+            `,
+            data(){
+                return {content:'来自App的数据'}
+            },
+            components:{List}
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>:

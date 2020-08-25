@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+        // 如果路由组件的布局一致,内容不一致,则路由组件只用一个就足够.
+        // 关键逻辑:
+        //      在路由路径发生改变时,传递给路由组件不同的内容.
+        // 如何知道路路径发生了变化.(如何知道路由发生切换)
+        //      万能:通过watch监听$route
+
+        const RouterContent = {
+            template:`<div>{{content}}</div>`,
+            props:['content']
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/home',
+                    component:RouterContent
+                },{
+                    path:'/news',
+                    component:RouterContent
+                },{
+                    path:'/sport',
+                    component:RouterContent
+                },{
+                    path:'/',
+                    redirect:'/home'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <button @click='toPage("/home")'>首页</button>
+                    <button @click='toPage("/news")'>新闻</button>
+                    <button @click='toPage("/sport")'>体育</button>
+                    <router-view :content='content' />
+                </div>
+            `,
+            data(){
+                return {
+                    arr:['首页','新闻','体育'],
+                    content:''
+                }
+            },
+            watch:{
+                '$route':{
+                    immediate:true,
+                    handler(){
+                        // console.log('路由发生了切换');
+                        console.log(this.$route.path.slice(1));
+
+                        switch(this.$route.path.slice(1)){
+                            case 'home':
+                                this.content = this.arr[0];
+                                break;
+                            case 'news':
+                                this.content = this.arr[1];
+                                break;
+                            case 'sport':
+                                this.content = this.arr[2];
+                                break;
+                        }
+
+                    }
+                }
+            },
+            methods:{
+                toPage(path){
+                    this.$router.push(path);// "/div1"
+                }
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

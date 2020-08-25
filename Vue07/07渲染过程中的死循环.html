@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>1111111</div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 如果在渲染的过程中修改数据,产生了新的渲染过程,就容易出现死循环.
+        // 例如:fn调用导致视图更新,视图跟新又会重新调用fn.永无止境...死循环.
+
+        // React会很容易出现渲染死循环.
+
+        const App = {
+            template:`
+                <div id='app'>
+                    {{msg}}
+                    {{fn()}}
+                </div>
+            `,
+            data(){
+                return {
+                    msg:'8888'
+                }
+            },
+            methods:{
+                fn(){
+                    this.msg = Math.random();
+                }
+            },
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>

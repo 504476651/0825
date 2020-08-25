@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+        // Vue路由有一个对象和location对象功能类似,叫$route对象.
+        // $route和$router是不同的对象.
+        // $route -> 管理路由的url
+        // $router -> 管理路由器.
+        // 可以通过任意组件找到$route对象.
+
+        // 可以通过this.$route.path来获取当前的路由路径.
+
+        const Page1 = {
+            template:`<div>首页</div>`
+        }
+        const Page2 = {
+            template:`<div>新闻</div>`
+        }
+        const Page3 = {
+            template:`<div>体育</div>`
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/div1',
+                    component:Page1
+                },{
+                    path:'/div2',
+                    component:Page2
+                },{
+                    path:'/div3',
+                    component:Page3
+                },{
+                    path:'/',
+                    redirect:'/div1'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <button @click='toPage("/div1")'>首页</button>
+                    <button @click='toPage("/div2")'>新闻</button>
+                    <button @click='toPage("/div3")'>体育</button>
+                    <router-view />
+                </div>
+            `,
+            methods:{
+                toPage(path){
+                    this.$router.push(path);// "/div1"
+                }
+            },
+            created(){
+                console.log(this.$route); // "/div1"
+                console.log(this.$route.path.slice(1)); // "div1"
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

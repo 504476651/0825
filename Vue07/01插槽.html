@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 如果两个组件的模板只有很少的部分不一样.没必要写成两个组件.可以使用插槽合成一个组件
+        // 要引入插槽,组件必须是双标签.插槽写在组件自定义标签内.
+        // 渲染组件时,<slot></slot>会自动被组件的内容替换.一个slot可以包含多个节点.
+        // 可以通过name属性来进行插槽匹配.
+        
+        const Box1 = {
+            template:`
+                <div>
+                    <slot name='b'></slot>
+                    <p>11111</p>
+                    <p>22222</p>
+                    <input type='button' value='嗷嗷嗷' />
+                    <slot name='a'></slot>
+                </div>
+            `
+        }
+
+        // const Box2 = {
+        //     template:`
+        //         <div>
+        //             <div>Box2组件</div>
+        //             <p>11111</p>
+        //             <p>22222</p>
+        //             <input type='button' value='嗷嗷嗷' />
+        //         </div>
+        //     `
+        // }
+
+        const App = {
+            template:`
+                <div>
+                    <Box1>
+                        <h3 slot='a'>Box1组件</h3>
+                    </Box1>
+                    <Box1>
+                        <div slot='b'>Box2组件</div>
+                        <div slot='b'>Box2组件</div>
+                    </Box1>
+                </div>
+            `,
+            components:{Box1}
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+
+        console.log(router)
+        cons
+        // 路由 -> 用于实现SPA.
+        // 传统网页 -> 一个主页,多个分页
+        // SPA -> 一个主页,没有分页.(分页就是组件,一个分页一个组件)
+        // SPA -> 单页应用 -> Single Page Application.(一个网站就一个html)
+        // 路由的主要工作 -> 根据url路径来切换对应的分页(组件).通过动态组件实现.
+        // <router-view /> -> Vue内置的动态组件.
+        // <router-link> -> 相当于a标签.to属性相当于href属性.
+        
+        // 使用路由:
+        //  1:实例化路由.
+        //        配置路由选项(配置url路径和对应显示的组件的关系)
+        //  2:挂载路由
+        
+        // 重定向 -> redirect
+        //    当path是'/'时,让path变成'/div1'
+        
+        // {
+        //     path:'/',
+        //     redirect:'/div1'
+        // }
+
+        const Page1 = {
+            template:`<div>首页</div>`
+        }
+        const Page2 = {
+            template:`<div>新闻</div>`
+        }
+        const Page3 = {
+            template:`<div>体育</div>`
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/div1',
+                    component:Page1
+                },{
+                    path:'/div2',
+                    component:Page2
+                },{
+                    path:'/div3',
+                    component:Page3
+                },{
+                    path:'/',
+                    redirect:'/div1'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <router-link to='/div1'>首页</router-link>
+                    <router-link to='/div2'>新闻</router-link>
+                    <router-link to='/div3'>体育</router-link>
+                    <router-view />
+                </div>
+            `
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

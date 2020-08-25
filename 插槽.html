@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="./js/vue1.js"></script>
+<script>
+    let Box = {
+        template: `
+            <div>{{msg}}</div>
+        `,
+        props: ['msg']
+    }
+
+
+    let Item = {
+        template: `
+            <div>
+            {{msg}}
+                <slot/>
+            </div>
+        `,
+        props: ['msg']
+    }
+
+
+
+    let App = {
+        template: `
+            <div>
+                <Item>
+                    <Box :msg='msg'/>
+                </Item>
+            </div>
+        `,
+        components: { Item, Box },
+        data() {
+            return {
+                msg: 'App'
+            }
+        }
+    }
+
+    new Vue({
+        render: h => h(App)
+    }).$mount('#app')
+</script>
+
+</html>

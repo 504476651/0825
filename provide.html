@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+<script src="./js/vue1.js"></script>
+<script>
+    let Item = {
+        template:`
+            <div>{{msg}}
+            {{arr}}
+            <button @click='add'>按钮</button>
+            </div>
+        `,
+        inject:['msg','add','arr']
+
+    }
+
+let App = {
+    template:`
+        <div>
+            {{msg}}
+            <Item :add='add'/>
+        </div>
+    `,
+    components:{Item},
+    data(){
+        return{
+            msg:1,
+            arr:[1,2]
+        }
+    },
+    provide(){
+            return{
+                msg:this.msg,
+                add:this.add,
+                arr:this.arr
+            }
+        },
+    methods:{
+        add(){
+            this.msg++;
+            this.arr.push(this.msg)
+        }
+    }
+}
+new Vue({
+    render:h=>h(App)
+}).$mount('#app')
+
+</script>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>
+        <ul>
+            <li>
+                <span>99999</span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 同一个组件的创建阶段的4个钩子函数顺序 -> beforeCreate,created,beforeMounte,mounted.
+        // 多个组件,例如父子组件的钩子顺序是怎么样的.兄弟组件的钩子顺手是怎么样的.
+
+        let bus = new Vue();
+
+        const List = {
+            template:`
+                <ul>
+                    <li>{{msg}}</li>
+                </ul>
+            `,
+            data(){
+                return {
+                    msg:'来自List的数据'
+                }
+            },
+            mounted(){
+                console.log('List');
+                bus.$emit("receiveMsg",this.msg);
+            }
+        }
+
+        const Item = {
+            template:`
+                <ul>
+                    <li>{{msg}}</li>
+                </ul>
+            `,
+            data(){
+                return {
+                    msg:''
+                }
+            },
+            created(){
+                console.log('Item');
+                bus.$on('receiveMsg',(msg)=>{
+                    this.msg = msg;
+                })
+            }
+        }
+
+        const App = {
+            template:`
+                <div>
+                    <List />
+                    <Item />
+                </div>
+            `,
+            components:{List,Item},
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>:

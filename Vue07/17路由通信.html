@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'></div>
+
+    <script src="js/vue1.js"></script>
+    <!-- 路由是Vue的插件,因此需要先引入Vue再引入Router -->
+    <script src="js/vue-router.js"></script>
+    <script>
+
+        // App和RouterContent组件可以通过props通信.
+        // 路由从home跳到result,那这次跳转如何把RouterContent组件的内容传递给Result
+        // RouterContent如何和Result通信.(路由组件间互相通信)?
+
+        // 传递:this.$router.push({name:路由名,params:{参数名:通信数据}});
+        // 获取:this.$route.params.参数名
+
+        // 路由再切换时,默认会销毁当前的组件.再切回来时再次创建.
+
+        const RouterContent = {
+            template:`<div>{{content}}</div>`,
+            props:['content']
+        }
+
+        const Result = {
+            template:`<h3>刚才显示的页面是:{{page}}</h3>`,
+            data(){
+                return {page:''}
+            },
+            watch:{
+                '$route':{
+                    immediate:true,
+                    handler(){
+                        console.log('1111111')
+                        this.page = this.$route.params.page
+                    }
+                }
+            },
+
+            // created(){
+            //    console.log(this.$route.path);
+            //    this.page = this.$route.params.page
+            //}
+        }
+
+        let router = new VueRouter({
+            routes:[
+                {
+                    path:'/home',
+                    component:RouterContent,
+                    name:'home'
+                },{
+                    path:'/news',
+                    component:RouterContent,
+                    name:'news'
+                },{
+                    path:'/sport',
+                    component:RouterContent,
+                    name:'sport'
+                },{
+                    path:'/result',
+                    component:Result,
+                    name:'result'
+                },{
+                    path:'/',
+                    redirect:'/home'
+                }
+            ]
+        })
+
+        const App = {
+            template:`
+                <div>
+                    <button @click='toPage("    home")'>首页</button>
+                    <button @click='toPage("news")'>新闻</button>
+                    <button @click='toPage("sport")'>体育</button>
+                    <button @click='toPage("result")'>结果</button>
+                    <router-view :content='content' />
+                </div>
+            `,
+            data(){
+                return {
+                    data:{home:'首页',news:'新闻',sport:'体育'},
+                    // content:''
+                }
+            },
+            computed:{
+                content(){
+                    // 获取当前的路由路径,再通过这个路径筛选data的内容传递给子组件RouterContent
+                    let path = this.$route.path.slice(1);
+                    return this.data[path]
+                }
+            },
+            methods:{
+                toPage(name){
+                    // this.$router.push(path); 
+                    console.log(this.$route)
+                    console.log(this.$router)
+                    this.$router.push({name,params:{page:this.content}});
+                }
+            }
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App},
+            router
+        })
+
+    </script>
+    
+</body>
+</html>

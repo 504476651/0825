@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+
+    let data = {
+        num: 2,
+        str: '文本',
+        obj: {
+            name: '瑶胖子'
+        },
+        arr: []
+    }
+    class Observe {
+        constructor(data) {
+            this.Observe(data)
+        }
+        Observe(data) {
+            for (let prop in data) {
+               this.defineProperty(data, prop)
+            }
+        }
+    
+    defineProperty(data, prop){
+        Object.defineProperty(data, prop, {
+
+            get() {
+               console.log(111)
+            },
+            set() {
+              new Del().del.forEach((item)=>{
+                    item
+              })
+
+            }
+        })
+    }
+    }
+
+    new Observe(data)
+    
+    class Render{
+        constructor(data,prop){
+            this.render
+            this.data[prop]
+        }
+        render(data,prop){
+           let div = document.createElement('div')
+           let text = document.createTextNode(data[prop])
+           div.appendChild(text)
+           document.body.appendChild(div)
+          
+        }
+    }
+    
+class Del{
+    constructor(){
+        this.del = []
+        this.add()
+    }
+    add(){
+        this.del.push(new Render(data).render)
+    }
+
+}
+new Del()
+
+</script>
+
+</html>

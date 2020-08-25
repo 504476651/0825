@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>
+        <ul>
+            <li>
+                <span>99999</span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 动态组件 -> 通过给is属性绑定变量.再切换变量的值,就可以切换显示对应的组件.
+
+        const List = {
+            template:`
+                <ul>
+                    <li>List:1111111111</li>
+                </ul>
+            `
+        }
+
+        const Item = {
+            template:`
+                <ul>
+                    <li>Item:22222222222</li>
+                </ul>
+            `
+        }
+
+        const App = {
+            template:`
+                <div>
+                    <input type='button' value='按钮' @click='fn' />
+                    <ul :is='com' />
+                </div>
+            `,
+            data(){
+                return {
+                    com:'List',
+                    flag:true
+                }
+            },
+            methods:{
+                fn(){
+                    this.flag = !this.flag;
+                    this.com = this.flag?'Item':'List'
+                }
+            },
+            components:{List,Item},
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>:

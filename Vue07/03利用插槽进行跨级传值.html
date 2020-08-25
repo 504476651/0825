@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id='app'>
+        <ul>
+            <li>
+                <span>99999</span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="js/vue1.js"></script>
+    <script>
+
+        // 如果App的数据需要传递给第4级子组件,则这数据需要经过每一层子组件,才能传递到最底层的组件.
+        // 这个做法很麻烦.
+        // 这种组件的组织方法,把布局'割裂了'.导致布局结构变得不直观了.
+
+        // 利用插槽,把嵌套关系的组件都通过插槽引入.这样在App的模板里可以出现所有的子孙组件.
+        // 这样就可以把App的数据直接传递给想传递的组件.而不需要一层层传递.
+        // 这样的写法,布局也不'割裂'了.
+        // 副作用:
+        //     这个写法,会导致Item不再是List的子组件,Content不再是Item的子组件.
+        //     实际上在组件关系上,List和Item和Content变成了兄弟组件.
+        //     没有办法通过props把Item的数据传递给Content....
+        //     只不过插槽保证了这些组件的嵌套关系.
+        //     因此这种做法也叫'父子解耦'.
+
+        // Vue,小程序,react都有利用插槽进行跨级传值的做法.
+
+        const Content = {
+            template:`<span>{{content}}:{{d}}:{{msg}}</span>`,
+            props:['content','d','msg'],
+            created(){
+                console.log(this.$parent);// Item
+            }
+        }
+
+        const Item = {
+            template:`
+                <li>
+                    <slot :msg='msg'></slot>
+                </li>
+            `,
+            data(){
+                return {
+                    msg:'11111'
+                }
+            }
+        }
+
+        const List = {
+            template:`
+                <ul>
+                    <slot></slot>
+                </ul>
+            `,
+        }
+
+        const App = {
+            template:`
+                <div>
+                    {{content}}
+                    <ul is='List'>
+                        <li is='Item' v-for='d in 5'>
+                            <span is='Content' :d='d' :content='content'></span>
+                        </li>
+                    </ul>
+                </div>
+            `,
+            data(){
+                return {content:'来自App的数据'}
+            },
+            components:{List,Item,Content}
+        }
+
+        new Vue({
+            el:'#app',
+            template:`<App />`,
+            components:{App}
+        })
+
+    </script>
+
+</body>
+</html>:
